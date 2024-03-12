@@ -1,5 +1,5 @@
 
-
+/*
 
 Introduction
 You’re a data analyst for ForestQuery, a non-profit organization, on a mission to reduce deforestation around the world and which raises awareness about this important environmental topic.
@@ -23,6 +23,7 @@ Steps to Complete
 
 5 - Keep in mind that the column forest_area_sqkm in the forest_area table and the land_area_sqmi in the land_area table are in different units (square kilometers and square miles, respectively), so an adjustment will need to be made in the calculation you write (1 sq mi = 2.59 sq km).
 
+*/
 
 CREATE VIEW forestation
 AS
@@ -52,8 +53,10 @@ AS
 
 
 ============================================================================================================================================
-
+/* 
 a. What was the total forest area (in sq km) of the world in 1990? Please keep in mind that you can use the country record denoted as “World" in the region table.
+
+*/
 
 SELECT country_name,
        year,
@@ -64,23 +67,35 @@ WHERE  year = 1990
 GROUP  BY 1,
           2 
 
+/*	
 RESULT: 
 World	1990	41,282,694.9 sqkm
-
+*/
 
 ============================================================================================================================================
+
+/*	
+	
 b. What was the total forest area (in sq km) of the world in 2016? Please keep in mind that you can use the country record in the table is denoted as “World.”
 
+*/
+	
 SELECT Sum(forest_area_sqkm) total_forest_area
 FROM   forestation
 WHERE  country_name = 'World'
        AND year = '2016' 
 
+/*
+	
 RESULT: 
 World	2016	39,958,245.9 sqkm
-
+*/
 ============================================================================================================================================
+/* 
+	
 c. What was the change (in sq km) in the forest area of the world from 1990 to 2016?
+
+*/
 
 SELECT (
 (SELECT SUM(forest_area_sqkm) total_forest_area
@@ -109,11 +124,16 @@ SELECT ( (SELECT Sum(forest_area_sqkm) total_forest_area
 FROM   forestation
 LIMIT  1 
 
+
+/* 	
 difference = 1,324,449sqkm
-
+*/
 ============================================================================================================================================
+/* 
+	
 d. What was the percent change in forest area of the world between 1990 and 2016?
-
+*/
+	
 WITH percent_change AS (
 SELECT (((
   (SELECT SUM(forest_area_sqkm) total_forest_area
@@ -159,12 +179,12 @@ SELECT Concat(Round(p.percent_diff::numeric,2), '%') AS percent_diff
 FROM   percent_change p
 
 
-percent_diff = 3.21%
+-- percent_diff = 3.21%
 
 
 ============================================================================================================================================
 
-e. If you compare the amount of forest area lost between 1990 and 2016, to which country's total area in 2016 is it closest to?
+-- e. If you compare the amount of forest area lost between 1990 and 2016, to which country's total area in 2016 is it closest to?
 
 WITH country_closest AS (
   SELECT 
@@ -183,7 +203,7 @@ WHERE c.total_land_area < '1314449'
 ORDER BY 2 DESC
 LIMIT 1
 
-FORMATTED:
+-- FORMATTED:
 
 WITH country_closest AS
 (
@@ -200,14 +220,14 @@ WHERE    c.total_land_area < '1314449'
 ORDER BY 2 DESC limit 1
 
 
-RESULT: Peru   total_land_area= 1279999.9891  
+ -- RESULT: Peru   total_land_area= 1279999.9891  
 
 
 
 ============================================================================================================================================
 
-2. REGIONAL OUTLOOK
-
+--2. REGIONAL OUTLOOK
+/* 
 Instructions:
 
   -  Answering these questions will help you add information into the template.
@@ -217,6 +237,7 @@ Instructions:
   
   
 Based on the table you created, ....
+*/
 
 WITH year_1990 AS (
   SELECT 
@@ -291,22 +312,24 @@ FROM   year_1990 s
          ON e.region = s.region
 ORDER  BY 2 DESC 
 
+
+	
   RESULT:
 
 
       region	                        forest_percentage_1990	              forest_percentage_2016
-      Latin America & Caribbean	                51.03	                          46.16
-      Europe & Central Asia	                    37.28	                          38.04
-      North America	                            35.65	                          36.04
-      World	                                    32.42	                          31.38
-      Sub-Saharan Africa	                      30.67	                          28.79
-      East Asia & Pacific	                      25.78	                          26.36
-      South Asia	                              16.51	                          17.51
-      Middle East & North Africa	              1.78	                          2.07
+      Latin America & Caribbean	                	51.03	                          46.16
+      Europe & Central Asia	                    	37.28	                          38.04
+      North America	                            	35.65	                          36.04
+      World	                                    	32.42	                          31.38
+      Sub-Saharan Africa	                      	30.67	                          28.79
+      East Asia & Pacific	                      	25.78	                          26.36
+      South Asia	                              	16.51	                          17.51
+      Middle East & North Africa	              	1.78	                          2.07
 
 ============================================================================================================================================
 
-a. What was the percent forest of the entire world in 2016? 
+--a. What was the percent forest of the entire world in 2016? 
 
 SELECT 
   ROUND(f.forest_percentage::numeric, 2) AS forest_percentage
@@ -321,23 +344,23 @@ WHERE  year = '2016'
        AND country_name = 'World' 
 
 
-RESULT:     31.38%
+--RESULT:     31.38%
 
 
-Which region had the HIGHEST percent forest in 2016, 
+--Which region had the HIGHEST percent forest in 2016, 
 
-RESULT:  Latin America & Caribbean	46.16%
+--RESULT:  Latin America & Caribbean	46.16%
 
 
-and which had the LOWEST, to 2 decimal places?
+--and which had the LOWEST, to 2 decimal places?
 
-RESULT: Middle East & North Africa	2.07%
+--RESULT: Middle East & North Africa	2.07%
 
 
 
 ============================================================================================================================================
 
-b. What was the percent forest of the entire world in 1990? 
+--b. What was the percent forest of the entire world in 1990? 
 
 SELECT 
   ROUND(f.forest_percentage::numeric, 2) AS forest_percentage
@@ -345,14 +368,14 @@ FROM forestation f
 WHERE year = '1990' and country_name = 'World'
 
 
-FORMATTED:
+--FORMATTED:
 
 SELECT Round(f.forest_percentage :: NUMERIC, 2) AS forest_percentage
 FROM   forestation f
 WHERE  year = '1990'
        AND country_name = 'World' 
 
-
+/*
 RESULT:     32.42%
 
 Which region had the HIGHEST percent forest in 1990, 
@@ -363,11 +386,11 @@ and which had the LOWEST, to 2 decimal places?
 
 RESULT: Middle East & North Africa	1.78%
 
-
+*/
 
 ============================================================================================================================================
 
-c. Based on the table you created, which regions of the world DECREASED in forest area from 1990 to 2016?
+-- c. Based on the table you created, which regions of the world DECREASED in forest area from 1990 to 2016?
 
 WITH year_1990 AS (
   SELECT 
@@ -458,17 +481,17 @@ SELECT f.region,
        Concat(Round(f.percent_diff :: NUMERIC, 2), '%') AS percent_decrease
 FROM   forest_decrease f 
 
-
+/*
 RESULT:
 
 region                      percent_decrease
 Latin America & Caribbean	    -4.87%
 Sub-Saharan Africa	          -1.89%
 World	                        -1.05%
-
+*/
 
 ============================================================================================================================================
-
+/*
 3. COUNTRY-LEVEL DETAIL
 
 Instructions:
@@ -476,11 +499,11 @@ Instructions:
 Answering these questions will help you add information to the template.
 Use these questions as guides to write SQL queries.
 Use the output from the query to answer these questions.
-
+*/
 
 ============================================================================================================================================
-3. COUNTRY-LEVEL DETAIL
-    SUCCESS STORIES
+--3. COUNTRY-LEVEL DETAIL
+    --SUCCESS STORIES
 
 WITH t1 AS (
   SELECT 
@@ -543,6 +566,7 @@ WHERE  t1.forest_area_sqkm_1990 < t2.forest_area_sqkm_2016
        AND t2.country_name != 'World'
 ORDER  BY 4 DESC 
 
+/*
 
 RESULT:  
 
@@ -553,10 +577,10 @@ India	                    639390	                    708603.9844	              6
 Russian Federation	      8089500	                    8148895	                  59395
 Vietnam	                  93630	                      149020	                  55390
 Spain	                    138094.9023	                184520	                  46425.0977
-
+*/
 ============================================================================================================================================
 
- largest percent change in forest area from 1990 to 2016
+ --largest percent change in forest area from 1990 to 2016
 
 WITH t1 AS (
   SELECT country_name,
@@ -618,6 +642,7 @@ WHERE  t1.percent_forestation_1990 IS NOT NULL
 ORDER  BY percent_change DESC 
 
 
+/*	
 country_name	      percent_change
 Iceland	              213.66%
 French Polynesia	    181.82%
@@ -625,10 +650,10 @@ Bahrain	              145.91%
 Uruguay	              134.11%
 Dominican Republic	  82.46%
 Kuwait	              81.16%
-
+*/
 ============================================================================================================================================
 
-a. Which 5 countries saw the largest amount decrease in forest area from 1990 to 2016? What was the difference in forest area for each?
+-- a. Which 5 countries saw the largest amount decrease in forest area from 1990 to 2016? What was the difference in forest area for each?
 
 WITH t1 AS (
   SELECT 
@@ -695,17 +720,19 @@ AND      t2.country_name != 'World'
 ORDER BY 4 DESC limit 5
 
 
+/*
+
 country_name	forest_area_sqkm_1990	forest_area_sqkm_2016	lost_forest_area
 Brazil	            5467050	                4925540	          -541510.00
 Indonesia	          1185450	                903256.0156	      -282193.98
 Myanmar	            392180	                284945.9961	      -107234.00
 Nigeria	            172340	                65833.99902	      -106506.00
 Tanzania	          559200	                456880	          -102320.00
-
+*/
 
 ============================================================================================================================================
 
-b. Which 5 countries saw the largest percent decrease in forest area from 1990 to 2016? What was the percent change to 2 decimal places for each?
+-- b. Which 5 countries saw the largest percent decrease in forest area from 1990 to 2016? What was the percent change to 2 decimal places for each?
 
 
 WITH t1 AS (
@@ -767,7 +794,7 @@ WHERE  t1.percent_forestation_1990 IS NOT NULL
        AND t1.country_name != 'World'
 ORDER  BY percent_change DESC 
 
-
+/*
 
 RESULT:  country_name	percent_change
           Togo	          -75.45
@@ -775,11 +802,11 @@ RESULT:  country_name	percent_change
           Uganda	        -59.27
           Mauritania	    -46.75
           Honduras	      -45.03
-
+*/
 
 ============================================================================================================================================
 
-c. If countries were grouped by percent forestation in quartiles, which group had the most countries in it in 2016?
+-- c. If countries were grouped by percent forestation in quartiles, which group had the most countries in it in 2016?
 
 WITH T1 AS (
   SELECT country_name,
@@ -838,12 +865,13 @@ FROM   (SELECT country_name,
                AND year = 2016
                AND country_name != 'World') sub 
 
+/*	
 RESULT :    quartiles	  count
               0-25	      85
               25-50	      72
               50-75	      38
               75-100	     9
-
+*/
 
 
 WITH t1 AS (
@@ -930,24 +958,24 @@ FROM   t3
 WHERE  t3.quartiles = '75-100'
 ORDER  BY 3 DESC 
 
-
+/*
 RESULT:
           country_name	          quartiles	          percent_forest	        count
           Suriname	                75-100	            98.26	                9
-          Micronesia, Fed. Sts.	    75-100	            91.86	                9
-          Gabon	                    75-100	            90.04	                9
-          Seychelles	              75-100	            88.41	                9
-          Palau	                    75-100	            87.61	                9
-          American Samoa	          75-100	            87.50	                9
-          Guyana	                  75-100	            83.90	                9
-          Lao PDR	                  75-100	            82.11	                9
-          Solomon Islands	          75-100	            77.86	                9
+          Micronesia, Fed. Sts.	    	75-100	            91.86	                9
+          Gabon	                    	75-100	            90.04	                9
+          Seychelles	              	75-100	            88.41	                9
+          Palau	                    	75-100	            87.61	                9
+          American Samoa	        75-100	            87.50	                9
+          Guyana	                75-100	            83.90	                9
+          Lao PDR	                75-100	            82.11	                9
+          Solomon Islands	        75-100	            77.86	                9
 
-
+*/
 
 ============================================================================================================================================
 
-d. List all of the countries that were in the 4th quartile (percent forest > 75%) in 2016.
+-- d. List all of the countries that were in the 4th quartile (percent forest > 75%) in 2016.
 
 
 WITH t1 AS (
@@ -1028,7 +1056,7 @@ WHERE  t3.quartiles = '75-100'
 ORDER  BY 1 
 
 
-
+/*
 RESULT: country_name	          quartiles	count
         American Samoa	        75-100	  9
         Gabon	                  75-100	9
@@ -1040,11 +1068,11 @@ RESULT: country_name	          quartiles	count
         Solomon Islands	        75-100	9
         Suriname	              75-100	9
 
-
+*/
 
 ============================================================================================================================================
 
-e. How many countries had a percent forestation higher than the United States in 2016?
+--e. How many countries had a percent forestation higher than the United States in 2016?
 
 
 WITH t1 AS (
@@ -1112,96 +1140,8 @@ SELECT Concat(Sum(final1.count),
 FROM   final1 
 
 
-RESULT  94 Countries
+--RESULT  94 Countries
 
 
 
 
-games_played
-
-player_id
-league
-champions
-cup
-supercup
-
-
-
-
- supercup_stats
- supercup_goals
- supercup_minutes
-
- cup_stats
- cup_goals
- cup_minutes
- cup_yellow
-
- champions_stats
- champions_goals
- champions_minutes
-
- league_stats
- league_goals
- league_minutes
-
-df jordi
-fw messi
-ouig mf
-
-    WITH t1 AS (
-    SELECT s.player_id,
-        s.first_name || ' ' || s.last_name AS full_name,
-        s.position,
-        g.cup AS games_played,
-        c.cup_yellow AS yellow_card
-    FROM squad s
-    JOIN games_played g
-        ON s.player_id = g.player_id
-    JOIN cup_stats c
-        ON s.player_id = c.player_id
-    WHERE c.cup_yellow >= 1
-    ORDER BY 4 DESC ),
-    
-    fw AS (
-    SELECT *
-    FROM t1
-    WHERE t1.position = 'fw'
-    ORDER BY 5 DESC
-    LIMIT 1),
-    
-    df AS (
-    SELECT *
-    FROM t1
-    WHERE t1.position = 'df'
-    ORDER BY 5 DESC
-    LIMIT 1),
-    
-    mf AS (
-    SELECT *
-    FROM t1
-    WHERE t1.position = 'mf'
-    ORDER BY 4 DESC
-    LIMIT 1)
-    
-    SELECT 
-        fw.full_name, 
-        fw.position, 
-        fw.games_played,
-        fw.yellow_card
-    From fw
-    UNION
-    SELECT 
-        df.full_name, 
-        df.position, 
-        df.games_played,
-        df.yellow_card
-   From df
-   UNION
-   SELECT 
-        mf.full_name, 
-        mf.position, 
-        mf.games_played,
-        mf.yellow_card
-   From mf
-   ORDER BY 3 DESC
